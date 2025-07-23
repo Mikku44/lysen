@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '../../store'
 
 export interface InvoiceItem {
   id: string
@@ -44,6 +45,7 @@ const invoiceSlice = createSlice({
   name: 'invoice',
   initialState,
   reducers: {
+  
     setInvoices: (state, action: PayloadAction<InvoiceData[]>) => {
       state.invoices = action.payload
     },
@@ -91,4 +93,6 @@ export const {
   clearInvoices
 } = invoiceSlice.actions
 
+
+export const selectInvoices = (state:RootState) => state.invoice.invoices
 export default invoiceSlice.reducer

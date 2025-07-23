@@ -47,7 +47,9 @@ disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none
               <div className='w-[120px]'>.PDF (PDF File)</div>
             </Button>
             <hr />
-            <Button className='flex bg-white rounded-none text-black hover:bg-gray-300/20 shadow-none items-center gap-2 w-full hover:brightness-110'>
+            <Button
+            disabled
+            className='flex bg-white rounded-none text-black hover:bg-gray-300/20 shadow-none items-center gap-2 w-full hover:brightness-110'>
               <Download className='w-4 h-4' />
               <div className='w-[120px]'>.Docx (Word File)</div>
             </Button>

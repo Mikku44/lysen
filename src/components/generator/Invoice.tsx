@@ -77,7 +77,7 @@ export default function InvoiceGenerator () {
     i18n.changeLanguage(i18n.language === 'en' ? 'th' : 'en')
   }
   const saveInvoice = () => {
-    toast('Invoice has been saved!')
+    toast('Quatation has been saved!')
     dispatch(upsertInvoice(invoiceData))
   }
 
@@ -170,6 +170,7 @@ export default function InvoiceGenerator () {
 
   useEffect(() => {
     handleInputChange('invoiceNumber', `INV-${Date.now()}`)
+    setRefreshKey(prev => prev+1)
   }, [])
 
   
