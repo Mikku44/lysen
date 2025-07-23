@@ -23,16 +23,20 @@ export default function Navigator () {
   const invoiceList = useAppSelector(selectInvoices)
 
   return (
-    <div className='max-w-7xl mx-auto print:hidden p-6 flex justify-between'>
-      <Drawer open={open} onOpenChange={setOpen}>
+    <div className='max-w-7xl mx-auto print:hidden p-6 flex
+    gap-5
+    lg:flex-row flex-col justify-between'>
+      <Drawer
+      
+      open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <div className='relative'>
+          <div className='relative lg:w-fit w-full'>
             <motion.div
               key={invoiceList?.length}
               animate={{ scale: 1.2 }}
               initial={{ scale: 1 }}
               transition={{ duration: 0.3 }}
-              className=' top-[-10px] right-[-10px] absolute'
+              className=' top-[-10px] right-[-10px] absolute '
             >
               <Badge
                 className='h-6 min-w-6 rounded-full font-bold p-1 font-mono tabular-nums'
@@ -41,7 +45,9 @@ export default function Navigator () {
                 {invoiceList?.length}
               </Badge>
             </motion.div>
-            <Button variant='outline'>See all Quatation</Button>
+            <Button
+            className='w-full'
+            variant='outline'>See all Quotation</Button>
           </div>
         </DrawerTrigger>
         <DrawerContent className='mx-auto'>
@@ -55,7 +61,7 @@ export default function Navigator () {
         </DrawerContent>
       </Drawer>
 
-      <div className='flex gap-1 items-end'>
+      <div className='flex lg:flex-row flex-col lg:mx-0 mx-auto gap-1 items-end'>
         <div className=''>Customize Template</div>
         <Template />
       </div>

@@ -82,7 +82,7 @@ export default function InvoiceGenerator () {
 
   // }
   const saveInvoice = () => {
-    toast('Quatation has been saved!')
+    toast('Quotation has been saved!')
     dispatch(upsertInvoice(invoiceData))
   }
 
@@ -193,7 +193,7 @@ export default function InvoiceGenerator () {
               Create professional Quotations in minutes
             </p>
           </div>
-          <div className='flex gap-3 flex-wrap'>
+          <div className='flex gap-3 flex-wrap justify-center'>
             {/* <Button onClick={switchCurrency}>{currency}</Button>
             <Button onClick={toggleLang}>
               {i18n.language === 'en' ? 'TH' : 'EN'}
