@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 
 export default function Template() {
   const dispatch = useAppDispatch()
-  const { color } = useAppSelector(selectTemplate)
+  const { color,currency } = useAppSelector(selectTemplate)
 
   useEffect(() => {
     
@@ -30,6 +30,8 @@ export default function Template() {
           className='w-16 h-10 p-0 border-none bg-transparent cursor-pointer opacity-0'
         />
       </label>
+
+      <label htmlFor="currency">{currency}</label>
     </div>
   )
 }

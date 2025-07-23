@@ -7,12 +7,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Plus, Minus, Download, Eye } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useAppDispatch } from '@/app/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { upsertInvoice } from '@/app/store/features/invoices/invoicesSlice'
 import SignatureCanvas from './SignatureCanvas'
 import { toast } from '../toast'
 import { NumbertoPrice } from '@/lib/currencyFormator'
 import Export from './Export'
+import { selectTemplate, setLang } from '@/app/store/features/template/templateSlice'
 
 interface InvoiceItem {
   id: string
@@ -45,9 +46,11 @@ interface InvoiceData {
 }
 
 export default function InvoiceGenerator () {
+  const template = useAppSelector(selectTemplate);
+
   const { t, i18n } = useTranslation()
   const [refreshKey, setRefreshKey] = useState(0);
-  const [currency, setCurrency] = useState('THB')
+  const [currency, setCurrency] = useState(template?.currency ||'THB')
   const invoiceRef = useRef<HTMLElement>(null)
   const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     invoiceNumber: '',
@@ -74,7 +77,10 @@ export default function InvoiceGenerator () {
     setCurrency(currencies[nextIndex])
   }
   const toggleLang = () => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'th' : 'en')
+    const newLang = i18n.language === 'en' ? 'th' : 'en'
+    i18n.changeLanguage(newLang)
+    dispatch(setLang(newLang))
+
   }
   const saveInvoice = () => {
     toast('Quatation has been saved!')
