@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Lysen(ลายเซ็น) - Free Quotation & Receipt Generator
 
-## Getting Started
+TH: ภาษาไทย
+-------------------------------
 
-First, run the development server:
+Lysen คือเครื่องมือโอเพ่นซอร์สที่ช่วยให้คุณสร้างใบเสนอราคา (Quotation) และใบเสร็จ (Receipt) ได้ง่ายและฟรี ไม่ต้องล็อกอิน ไม่เก็บข้อมูลผู้ใช้งาน ใช้งานง่าย รวดเร็ว เหมาะสำหรับฟรีแลนซ์ ธุรกิจขนาดเล็ก หรือองค์กรทุกประเภท
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+คุณสมบัติหลัก:
+- สร้างใบเสนอราคาและใบเสร็จได้ภายในไม่กี่วินาที
+- ไม่ต้องสมัครสมาชิกหรือล็อกอิน
+- ปรับแต่งรูปแบบได้ตามต้องการ
+- รองรับการพิมพ์และบันทึกเป็น PDF
+- ใช้งานฟรี 100%
+- พัฒนาด้วย Next.js, TypeScript และ Tailwind CSS
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ลิงก์โปรเจกต์:
+https://lysen.khain.app
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+การใช้งานเบื้องต้น:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clone โค้ดจาก GitHub
 
-## Learn More
+   git clone https://github.com/Mikku44/lysen.git
+   cd lysen
 
-To learn more about Next.js, take a look at the following resources:
+2. ติดตั้ง dependencies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. เริ่มใช้งานในโหมด development
 
-## Deploy on Vercel
+   npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   จากนั้นเปิดเบราว์เซอร์ไปที่ http://localhost:3000
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. สร้างโปรเจกต์สำหรับ production
+
+   npm run build
+   npm start
+
+การร่วมพัฒนา:
+เรายินดีต้อนรับการร่วมพัฒนา ไม่ว่าจะเป็นการเพิ่มฟีเจอร์ใหม่ ปรับปรุง UI/UX แปลภาษา หรือแก้ไขบั๊ก
+
+หากคุณต้องการเสนอฟังก์ชันใหม่หรือติดต่อพูดคุยเพิ่มเติม สามารถติดต่อได้ที่:
+
+Email: khain.app@gmail.com 
+
+License:
+MIT License - ใช้งานได้ฟรีทั้งส่วนตัวและเชิงพาณิชย์
+
+
+EN: English
+-------------------------------
+
+Lysen is an open-source tool to help you easily create quotations and receipts for free. No login required. No data is stored. Simple, fast, and suitable for freelancers, small businesses, or organizations of any size.
+
+Main Features:
+- Create quotations and receipts within seconds
+- No registration or login required
+- Fully customizable templates
+- Print-friendly and export to PDF
+- 100% free to use
+- Built with Next.js, TypeScript, and Tailwind CSS
+
+Live Project:
+https://lysen.khain.app
+
+Getting Started:
+
+1. Clone the repository
+
+   git clone https://github.com/Mikku44/lysen.git
+   cd lysen
+
+2. Install dependencies
+
+   npm install
+
+3. Start in development mode
+
+   npm run dev
+
+   Then open your browser at http://localhost:3000
+
+4. Build for production
+
+   npm run build
+   npm start
+
+Contributing:
+We welcome all contributions — whether you're adding new features, improving the UI/UX, translating content, or fixing bugs.
+
+If you'd like to suggest new functionality or talk with the team, feel free to contact:
+
+Email: khain.app@gmail.com
+
+License:
+MIT License — free for personal and commercial use

@@ -31,7 +31,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Lysen - Make Invoice & Receipt Easily | Free quotation Generator',
+  title: 'Lysen - Make Quotation & Receipt Easily | Free quotation Generator',
   description:
     'Create professional quotations and receipts effortlessly with Lysen. No login required, AI-optimized, 100% free quotation generator with customizable templates.',
   keywords: [
