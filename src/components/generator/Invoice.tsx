@@ -13,7 +13,7 @@ import SignatureCanvas from './SignatureCanvas'
 import { toast } from '../toast'
 import { NumbertoPrice } from '@/lib/currencyFormator'
 import Export from './Export'
-import { selectTemplate, setLang } from '@/app/store/features/template/templateSlice'
+import { selectTemplate } from '@/app/store/features/template/templateSlice'
 
 interface InvoiceItem {
   id: string
@@ -46,11 +46,10 @@ interface InvoiceData {
 }
 
 export default function InvoiceGenerator () {
-  const template = useAppSelector(selectTemplate);
+  const {currency} = useAppSelector(selectTemplate);
 
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [refreshKey, setRefreshKey] = useState(0);
-  const [currency, setCurrency] = useState(template?.currency ||'THB')
   const invoiceRef = useRef<HTMLElement>(null)
   const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     invoiceNumber: '',
@@ -70,18 +69,18 @@ export default function InvoiceGenerator () {
 
   const [showPreview, setShowPreview] = useState(false)
   const dispatch = useAppDispatch()
-  const currencies = ['THB', 'USD', 'JPY', 'KRW', 'CNY', 'MYR']
-  const switchCurrency = () => {
-    const currentIndex = currencies.indexOf(currency)
-    const nextIndex = (currentIndex + 1) % currencies.length
-    setCurrency(currencies[nextIndex])
-  }
-  const toggleLang = () => {
-    const newLang = i18n.language === 'en' ? 'th' : 'en'
-    i18n.changeLanguage(newLang)
-    dispatch(setLang(newLang))
+  // const currencies = ['THB', 'USD', 'JPY', 'KRW', 'CNY', 'MYR']
+  // const switchCurrency = () => {
+  //   const currentIndex = currencies.indexOf(currency)
+  //   const nextIndex = (currentIndex + 1) % currencies.length
+  //   setCurrency(currencies[nextIndex])
+  // }
+  // const toggleLang = () => {
+  //   const newLang = i18n.language === 'en' ? 'th' : 'en'
+  //   i18n.changeLanguage(newLang)
+  //   dispatch(setLang(newLang))
 
-  }
+  // }
   const saveInvoice = () => {
     toast('Quatation has been saved!')
     dispatch(upsertInvoice(invoiceData))
@@ -194,11 +193,11 @@ export default function InvoiceGenerator () {
               Create professional Quotations in minutes
             </p>
           </div>
-          <div className='flex gap-3'>
-            <Button onClick={switchCurrency}>{currency}</Button>
+          <div className='flex gap-3 flex-wrap'>
+            {/* <Button onClick={switchCurrency}>{currency}</Button>
             <Button onClick={toggleLang}>
               {i18n.language === 'en' ? 'TH' : 'EN'}
-            </Button>
+            </Button> */}
             <Button
               variant='outline'
               onClick={() => setShowPreview(!showPreview)}

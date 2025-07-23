@@ -50,12 +50,14 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 
   return (
     <div className='space-y-2'>
-      <canvas
-        ref={canvasRef}
-        height={height}
-        width={width}
-        className='border border-gray-300 rounded shadow-sm '
-      />
+      <div className="w-full border rounded overflow-hidden border-gray-300  shadow-sm">
+        <canvas
+          ref={canvasRef}
+          height={height}
+          width={width}
+          className='  mx-auto  '
+        />
+      </div>
       <div className='flex justify-end'>
         <button
           type='button'

@@ -4,20 +4,35 @@ import { useTranslation } from 'react-i18next'
 export default function LegalPage() {
   const { t } = useTranslation()
 
+  const terms = t('legal.terms', { returnObjects: true }) as string[]
+  const privacy = t('legal.privacy', { returnObjects: true }) as string[]
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 text-sm leading-relaxed min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">{t('legal.title')}</h1>
-      <p className="mb-6 text-gray-600">{t('legal.description')}</p>
+    <main className="max-w-3xl mx-auto px-6 py-16 text-gray-800 text-base leading-relaxed">
+      <h1 className="text-3xl font-semibold mb-6">{t('legal.title')}</h1>
+      <p className="mb-10 text-gray-600">{t('legal.description')}</p>
 
-      <h2 className="text-xl font-semibold mt-8 mb-2">{t('legal.termsTitle')}</h2>
-      <ul className="list-disc pl-6 space-y-1">
-       
-      </ul>
+      {/* Terms of Use Section */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-medium mb-4">{t('legal.termsTitle')}</h2>
+        <ol className="list-decimal pl-6 space-y-4 text-gray-700">
+          {terms.map((term, index) => (
+            <li key={index}>{term}</li>
+          ))}
+        </ol>
+      </section>
 
-      <h2 className="text-xl font-semibold mt-8 mb-2">{t('legal.privacyTitle')}</h2>
-      <ul className="list-disc pl-6 space-y-1">
-       
-      </ul>
-    </div>
+      <hr className="border-gray-200 my-12" />
+
+      {/* Privacy Policy Section */}
+      <section>
+        <h2 className="text-2xl font-medium mb-4">{t('legal.privacyTitle')}</h2>
+        <ol className="list-decimal pl-6 space-y-4 text-gray-700">
+          {privacy.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ol>
+      </section>
+    </main>
   )
 }

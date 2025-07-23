@@ -36,6 +36,7 @@ export default function MouseTracker () {
 
   return (
     <div
+    className='print:hidden'
       style={{
         position: 'fixed',
         top: position.y - size / 2,

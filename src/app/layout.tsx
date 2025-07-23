@@ -7,6 +7,7 @@ import MouseTracker from '@/components/MouseTracker'
 import Footer from '@/components/footer'
 import ReduxProvider from '@/components/home/ReduxProvider'
 import Template from '@/components/Template'
+import Navbar from '@/components/Navbar'
 
 const noto_Sans_Thai = Noto_Sans_Thai({
   variable: '--font-Noto-Sans-Thai',
@@ -107,7 +108,6 @@ export default function RootLayout ({
       <body
         className={`${noto_Sans_Thai.className} ${sarabun.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        
         <div className="hidden">
           <ReduxProvider>
             <Template></Template>
@@ -115,6 +115,7 @@ export default function RootLayout ({
         </div>
         <MouseTracker />
         <Announcement />
+        <Navbar />
         <Toaster closeButton position='top-center' />
         {children}
         <Footer />
