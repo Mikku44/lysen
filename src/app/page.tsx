@@ -1,103 +1,150 @@
-import Image from "next/image";
+import ReduxProvider from '@/components/home/ReduxProvider'
+import Typing from '@/components/home/Typing'
+import Template from '@/components/Template'
+import { Metadata } from 'next'
+import Link from 'next/link'
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: 'Lysen - Free Invoice & Receipt Generator | No Login Required',
+  description:
+    'Generate professional invoices and receipts instantly with Lysen. AI-powered, customizable templates, completely free. No registration needed - start creating now!',
+  openGraph: {
+    title: 'Lysen - Free Invoice & Receipt Generator',
+    description:
+      'Generate professional invoices and receipts instantly. AI-powered, customizable templates, completely free.',
+    url: 'https://lysen.khain.app',
+    images: [
+      {
+        url: '/og-home.png',
+        width: 1200,
+        height: 630,
+        alt: 'Lysen Homepage - Free Invoice Generator'
+      }
+    ]
+  }
+}
+
+export default function LandingPage () {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className='flex w-full min-h-screen items-center justify-center p-8 pb-20 gap-16 sm:p-20'>
+      <div className='max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center'>
+        <section className='space-y-8'>
+          <div className='space-y-4'>
+            <div className='flex gap-2 items-end'>
+              <h1 className='text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-black'>
+                Lysen{' '}
+              </h1>
+              <span className='text-zinc-800'>
+                <Typing />
+              </span>
+            </div>
+            <h2 className='text-xl sm:text-2xl text-gray-600 font-normal'>
+              Make invoice / receipt easily
+            </h2>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={'/generator'}
+            className='inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2'
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+            Get started
+          </Link>
+        </section>
+
+        <section className='space-y-6'>
+          <ul className='space-y-4'>
+            <li className='flex items-start space-x-3'>
+              <div className='w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full mt-2.5 flex-shrink-0'></div>
+              <span className='text-gray-700 text-lg'>No login needed</span>
+            </li>
+            <li className='flex items-start space-x-3'>
+              <div className='w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full mt-2.5 flex-shrink-0'></div>
+              <span className='text-gray-700 text-lg'>No data collection</span>
+            </li>
+            <li className='flex items-start space-x-3'>
+              <div className='w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full mt-2.5 flex-shrink-0'></div>
+              <span className='text-gray-700 text-lg'>Optimized with AI</span>
+            </li>
+            <li className='flex items-start space-x-3'>
+              <div className='w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full mt-2.5 flex-shrink-0'></div>
+              <span className='text-gray-700 text-lg'>
+                Customize your templates
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section className='lg:col-span-2 mt-16 pt-16 border-t border-gray-200'>
+          <div className='text-center space-y-12'>
+            <h3 className='text-3xl sm:text-4xl font-light text-black'>
+              Benefits of Lysen
+            </h3>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto'>
+              <div className='space-y-3 text-center'>
+                <div className='w-12 h-12 bg-[var(--color-primary)] rounded-full mx-auto flex items-center justify-center'>
+                  <div className='w-6 h-6 bg-white rounded-sm'></div>
+                </div>
+                <h4 className='text-lg font-medium text-black'>
+                  No Manual Complexity
+                </h4>
+                <p className='text-gray-600 text-sm'>
+                  Skip the hassle of manual invoice creation
+                </p>
+              </div>
+
+              <div className='space-y-3 text-center'>
+                <div className='w-12 h-12 bg-[var(--color-primary)] rounded-full mx-auto flex items-center justify-center'>
+                  <div className='w-6 h-6 bg-white rounded-full'></div>
+                </div>
+                <h4 className='text-lg font-medium text-black'>Easy to Use</h4>
+                <p className='text-gray-600 text-sm'>
+                  Simple and intuitive interface
+                </p>
+              </div>
+
+              <div className='space-y-3 text-center'>
+                <div className='w-12 h-12 bg-[var(--color-primary)] rounded-full mx-auto flex items-center justify-center'>
+                  <div className='w-6 h-6 bg-white rounded-full border-2 border-black'></div>
+                </div>
+                <h4 className='text-lg font-medium text-black'>Save Time</h4>
+                <p className='text-gray-600 text-sm'>
+                  Save time with automated features
+                </p>
+              </div>
+
+              <div className='space-y-3 text-center'>
+                <div className='w-12 h-12 bg-[var(--color-primary)] rounded-full mx-auto flex items-center justify-center'>
+                  <div className='w-4 h-4 bg-white transform rotate-45'></div>
+                </div>
+                <h4 className='text-lg font-medium text-black'>100% Free</h4>
+                <p className='text-gray-600 text-sm'>Completely free to use</p>
+              </div>
+
+              <div className='space-y-3 text-center'>
+                <div className='w-12 h-12 bg-[var(--color-primary)] rounded-full mx-auto flex items-center justify-center'>
+                  <div className='w-6 h-1 bg-white rounded-full'></div>
+                </div>
+                <h4 className='text-lg font-medium text-black'>Customizable</h4>
+                <p className='text-gray-600 text-sm'>
+                  Fully customizable templates
+                </p>
+              </div>
+
+              <div className='space-y-3 text-center'>
+                <div className='w-12 h-12 bg-[var(--color-primary)] rounded-full mx-auto flex items-center justify-center'>
+                  <div className='w-2 h-2 bg-white rounded-full'></div>
+                  <div className='w-2 h-2 bg-white rounded-full ml-1'></div>
+                </div>
+                <h4 className='text-lg font-medium text-black'>Secure</h4>
+                <p className='text-gray-600 text-sm'>
+                  Secure and private data handling
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  )
 }
