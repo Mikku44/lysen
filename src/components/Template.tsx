@@ -30,14 +30,17 @@ export default function Template () {
   }
 
   const handleChangeColor = (value: string) => {
+    // console.log("Rerendered")
     dispatch(setColor(value))
   }
 
   useEffect(() => {
     document.documentElement.style.setProperty('--primary', color)
+    //  console.log("Rerendered")
   }, [color])
 
   useEffect(() => {
+    //  console.log("Rerendered")
     i18n.changeLanguage(lang)
   }, [lang])
 
@@ -61,7 +64,9 @@ export default function Template () {
       </label> */}
 
       <ColorPick
-        onPick={(value: string) => handleChangeColor(value)}
+        onPick={(value: string) => {
+          handleChangeColor(value)
+        }}
         color={color}
       />
 

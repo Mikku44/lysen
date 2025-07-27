@@ -18,6 +18,8 @@
     "@types/html-to-docx": "^1.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "firebase": "^12.0.0",
     "framer-motion": "^12.23.6",
     "html-to-docx": "^1.8.0",
     "i18next": "^25.3.2",

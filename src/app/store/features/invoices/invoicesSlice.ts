@@ -33,19 +33,33 @@ export interface InvoiceData {
 
 interface InvoiceState {
   invoices: InvoiceData[]
-  currentInvoice : string;
+  currentInvoice: InvoiceData;
 }
 
 const initialState: InvoiceState = {
   invoices: [],
-  currentInvoice : ""
+  currentInvoice: {
+    invoiceNumber: '',
+    date: '',
+    dueDate: '',
+    fromCompany: '',
+    fromAddress: '',
+    toCompany: '',
+    toAddress: '',
+    items: [],
+    taxs: [],
+    notes: '',
+    terms: '',
+    constructorName: '',
+    constructorSign: ''
+  }
 }
 
 const invoiceSlice = createSlice({
   name: 'invoice',
   initialState,
   reducers: {
-  
+
     setInvoices: (state, action: PayloadAction<InvoiceData[]>) => {
       state.invoices = action.payload
     },
@@ -80,7 +94,23 @@ const invoiceSlice = createSlice({
     },
     clearInvoices: state => {
       state.invoices = []
-    }
+    },
+    //current Invoice
+    setCurrentInvoice: (state, action: PayloadAction<InvoiceData>) => {
+       console.log("State : ",action.payload)
+      state.currentInvoice = action.payload;
+    },
+    resetCurrentInvoice: (state) => {
+      console.log("Reset invoice!")
+      state.currentInvoice = initialState.currentInvoice;
+    },
+    // updateCurrentInvoiceField: (
+    //   state,
+    //   action: PayloadAction<{ field: keyof InvoiceData; value: any }>
+    // ) => {
+    //   (state.currentInvoice[action.payload.field] as any) = action.payload.value;
+    // },
+
   }
 })
 
@@ -90,9 +120,13 @@ export const {
   updateInvoiceByIndex,
   removeInvoiceByIndex,
   removeInvoiceByNumber,
-  clearInvoices
+  clearInvoices,
+  setCurrentInvoice,
+  resetCurrentInvoice,
+  // updateCurrentInvoiceField
 } = invoiceSlice.actions
 
 
-export const selectInvoices = (state:RootState) => state.invoice.invoices
+export const selectInvoices = (state: RootState) => state.invoice.invoices
+export const selectInvoice = (state: RootState) => state.invoice.currentInvoice
 export default invoiceSlice.reducer

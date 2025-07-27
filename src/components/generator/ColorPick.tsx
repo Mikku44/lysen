@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
   PopoverContent
 } from '@radix-ui/react-popover'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 interface IColorPickProps {
   onPick?: (value:string) => void
@@ -18,9 +18,7 @@ export default function ColorPick ({
 }: Readonly<IColorPickProps>) {
   const [currentColor, setColor] = useColor(color)
 
-  useEffect(() => {
-    onPick?.(currentColor.hex);
-  }, [currentColor]);
+
 
   return (
     <div>
@@ -44,7 +42,9 @@ disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none
         </PopoverTrigger>
         <PopoverContent>
           <div className='rounded-md   shadow grid my-1 gap-1 w-[300px]'>
-            <ColorPicker color={currentColor} onChange={setColor} />
+            <ColorPicker color={currentColor}
+            onChange={setColor}
+            onChangeComplete={(currentColor) => onPick?.(currentColor.hex)} />
           </div>
         </PopoverContent>
       </Popover>

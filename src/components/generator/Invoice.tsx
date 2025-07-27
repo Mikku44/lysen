@@ -8,7 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Plus, Minus, Download, Eye } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { upsertInvoice } from '@/app/store/features/invoices/invoicesSlice'
+import {
+  resetCurrentInvoice,
+  selectInvoice,
+  upsertInvoice
+} from '@/app/store/features/invoices/invoicesSlice'
 import SignatureCanvas from './SignatureCanvas'
 import { toast } from '../toast'
 import { NumbertoPrice } from '@/lib/currencyFormator'
@@ -46,10 +50,10 @@ interface InvoiceData {
 }
 
 export default function InvoiceGenerator () {
-  const {currency} = useAppSelector(selectTemplate);
-
+  const { currency } = useAppSelector(selectTemplate)
+  const currentInvoice = useAppSelector(selectInvoice)
   const { t } = useTranslation()
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0)
   const invoiceRef = useRef<HTMLElement>(null)
   const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     invoiceNumber: '',
@@ -173,12 +177,16 @@ export default function InvoiceGenerator () {
     )
   }
 
+
+
   useEffect(() => {
     handleInputChange('invoiceNumber', `INV-${Date.now()}`)
-    setRefreshKey(prev => prev+1)
+    setRefreshKey(prev => prev + 1)
   }, [])
 
-  
+  useEffect(() => {
+    setInvoiceData(currentInvoice)
+  }, [currentInvoice])
 
   return (
     <div className='min-h-screen bg-white'>
@@ -186,6 +194,7 @@ export default function InvoiceGenerator () {
         {/* Header */}
         <div className='flex print:hidden lg:flex-row flex-col gap-5 items-center justify-between mb-8'>
           <div>
+            <div className='max-w-3xl'>{JSON.stringify(selectInvoice)}</div>
             <h1 className='text-3xl font-light text-black'>
               Quotation Generator
             </h1>
@@ -200,6 +209,13 @@ export default function InvoiceGenerator () {
             </Button> */}
             <Button
               variant='outline'
+              onClick={() => dispatch(resetCurrentInvoice())}
+              className='flex items-center gap-2'
+            >
+              Reset
+            </Button>
+            <Button
+              variant='outline'
               onClick={() => setShowPreview(!showPreview)}
               className='flex items-center gap-2'
             >
@@ -207,11 +223,10 @@ export default function InvoiceGenerator () {
               {showPreview ? 'Edit' : 'Preview'}
             </Button>
             <Export
-            key={refreshKey}
-            onExport={() => {
-              setShowPreview(true)
-              
-            }}
+              key={refreshKey}
+              onExport={() => {
+                setShowPreview(true)
+              }}
             ></Export>
             <Button
               onClick={saveInvoice}
@@ -366,7 +381,7 @@ export default function InvoiceGenerator () {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className='space-y-4'>
-                  {invoiceData.items.map((item, index) => (
+                  {invoiceData.items.map(item => (
                     <div
                       key={item.id}
                       className='grid grid-cols-12 gap-2 items-end'
