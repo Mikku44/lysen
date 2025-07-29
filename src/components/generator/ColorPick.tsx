@@ -24,7 +24,7 @@ export default function ColorPick ({
     <div>
       <Popover>
         <PopoverTrigger
-          className='flex border border-white/20 items-center gap-2  hover:brightness-110
+          className='flex border border-gray-200/50 items-center gap-2  hover:brightness-110
 justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all 
 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none 
 [&_svg:not([class*="size-"])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none

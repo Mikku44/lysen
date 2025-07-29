@@ -1,19 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-
+const defaultState = {
+        id : "",
+        name : "anonymous",
+        imageURL : "/empty.png"
+    }
 
 export const userSlice = createSlice({
     name: "user",
-    initialState: {
-        // data that use want to get in every page
-        id : "uid0001",
-        name : "mikkucn",
-        imageURL : "/somepath.png"
-    },
+    initialState: defaultState,
     reducers: {
 
-        // function to update the data
         updateName : (state,action : PayloadAction<string>) => {
             state.name = action.payload
         }

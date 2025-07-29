@@ -212,7 +212,7 @@ export default function InvoiceGenerator () {
               onClick={() => dispatch(resetCurrentInvoice())}
               className='flex items-center gap-2'
             >
-              Reset
+              New Quatation
             </Button>
             <Button
               variant='outline'

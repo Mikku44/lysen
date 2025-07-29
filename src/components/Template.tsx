@@ -71,13 +71,13 @@ export default function Template () {
       />
 
       <Button
-        className='relative z-10 border border-white/20'
+        className='relative z-10 border border-gray-200/50'
         onClick={switchCurrency}
       >
-        {currency}
+        <div className="mix-blend-difference text-white">{currency}</div>
       </Button>
-      <Button className='border border-white/20' onClick={toggleLang}>
-        {lang !== 'en' ? 'TH' : 'EN'}
+      <Button className='border border-gray-200/50' onClick={toggleLang}>
+        <div className="mix-blend-difference text-white">{lang !== 'en' ? 'TH' : 'EN'}</div>
       </Button>
     </div>
   )

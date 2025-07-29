@@ -7,6 +7,7 @@ import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { InvoiceData, removeInvoiceByIndex, setCurrentInvoice } from '@/app/store/features/invoices/invoicesSlice'
 import { motion } from 'framer-motion'
+import { toast } from '../toast'
 
 export default function InvoiceListPage () {
   const invoices = useAppSelector(state => state.invoice.invoices)
@@ -19,6 +20,7 @@ export default function InvoiceListPage () {
   }
 
   const onSelectInvoice = (invoiceData:InvoiceData) => {
+     toast(`Select Quatation! ${invoiceData.invoiceNumber}`)
     dispatch(setCurrentInvoice(invoiceData))
   }
 
@@ -44,8 +46,8 @@ export default function InvoiceListPage () {
             <CardHeader className=''>
               <CardTitle className='text-lg flex justify-between items-center'>
                 <div className='flex gap-2 items-center'>
-                  <div className='px-4 py-2 font-normal text-sm bg-[var(--primary)] rounded-full'>
-                    {invoice.invoiceNumber}
+                  <div className='px-4 py-2 font-normal text-sm border bg-[var(--primary)] rounded-full'>
+                    <span className="mix-blend-difference text-white">{invoice.invoiceNumber}</span>
                   </div>
                   <div className=''></div>
                 </div>
