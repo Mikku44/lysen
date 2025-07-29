@@ -11,14 +11,7 @@ export const metadata: Metadata = {
     description:
       'Generate professional invoices and receipts instantly. AI-powered, customizable templates, completely free.',
     url: 'https://lysen.khain.app',
-    images: [
-      {
-        url: '/og-home.png',
-        width: 1200,
-        height: 630,
-        alt: 'Lysen Homepage - Free Invoice Generator'
-      }
-    ]
+    
   }
 }
 
