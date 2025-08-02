@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Template from './Template'
 import ReduxProvider from './home/ReduxProvider'
-import CountOnline from './firebase/countOnline'
-import { ChartColumnBig } from 'lucide-react'
+// import CountOnline from './firebase/countOnline'
+// import { ChartColumnBig } from 'lucide-react'
 
 export default function Footer () {
   return (
@@ -17,7 +17,14 @@ export default function Footer () {
           <ReduxProvider>
             <Template></Template>
             <div className='flex gap-1 items-center'>
-              <ChartColumnBig /> <CountOnline />
+              {/* <ChartColumnBig /> <CountOnline /> */}
+              <a href='https://www.hitwebcounter.com' target='_blank'>
+                <img
+                  src='https://hitwebcounter.com/counter/counter.php?page=21296567&style=0007&nbdigits=5&type=page&initCount=0'
+                  title='Counter Widget'
+                  alt='Visit counter For Websites'
+                />
+              </a>
             </div>
           </ReduxProvider>
         </div>
