@@ -18,6 +18,7 @@ import { toast } from '../toast'
 import { NumbertoPrice } from '@/lib/currencyFormator'
 import Export from './Export'
 import { selectTemplate } from '@/app/store/features/template/templateSlice'
+import { templateList } from '@/app/constant/app'
 
 interface InvoiceItem {
   id: string
@@ -85,6 +86,10 @@ export default function InvoiceGenerator () {
   //   dispatch(setLang(newLang))
 
   // }
+
+  const [currentForm, setCurrentForm] = useState('invoice')
+  const [index, setIndex] = useState(0)
+
   const saveInvoice = () => {
     toast('Quotation has been saved!')
     dispatch(upsertInvoice(invoiceData))
@@ -177,7 +182,18 @@ export default function InvoiceGenerator () {
     )
   }
 
+  const handleSwitchForm = () => {
 
+    let idx = index
+    if (index == 0) {
+      setIndex(1)
+      idx = 1
+    } else {
+      setIndex(0)
+      idx = 0
+    }
+    setCurrentForm(templateList[idx])
+  }
 
   useEffect(() => {
     handleInputChange('invoiceNumber', `INV-${Date.now()}`)
@@ -234,6 +250,31 @@ export default function InvoiceGenerator () {
             >
               <Download className='w-4 h-4' />
               Keep on your device
+            </Button>
+            <Button
+              onClick={handleSwitchForm}
+              className='flex items-center gap-2  hover:brightness-110'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='24'
+                height='24'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  fill='currentColor'
+                  d='M8.625 8.5h-4.5a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v3.5h3.5a1 1 0 0 1 0 2'
+                />
+                <path
+                  fill='currentColor'
+                  d='M21 13a1 1 0 0 1-1-1A7.995 7.995 0 0 0 5.08 8.001a1 1 0 0 1-1.731-1.002A9.995 9.995 0 0 1 22 12a1 1 0 0 1-1 1m-1.125 9a1 1 0 0 1-1-1v-3.5h-3.5a1 1 0 0 1 0-2h4.5a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1'
+                />
+                <path
+                  fill='currentColor'
+                  d='M12 22A10.01 10.01 0 0 1 2 12a1 1 0 0 1 2 0a7.995 7.995 0 0 0 14.92 3.999a1 1 0 0 1 1.731 1.002A10.03 10.03 0 0 1 12 22'
+                />
+              </svg>
+              Switch to Receive
             </Button>
           </div>
         </div>
@@ -627,7 +668,7 @@ export default function InvoiceGenerator () {
                   <div className='flex justify-between items-start'>
                     <div>
                       <h2 className='text-2xl font-bold text-black'>
-                        {t('invoice')}
+                        {t(currentForm)}
                       </h2>
                       <p className='text-gray-600'>
                         {invoiceData.invoiceNumber}
