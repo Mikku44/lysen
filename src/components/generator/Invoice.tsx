@@ -20,8 +20,7 @@ import { NumbertoPrice } from '@/lib/currencyFormator'
 import Export from './Export'
 import { selectTemplate } from '@/app/store/features/template/templateSlice'
 import { templateList } from '@/app/constant/app'
-import PromptPayQR from './PromptPayQR'
-import LoadDataQR from './InvoiceQRCode'
+
 
 interface InvoiceItem {
   id: string
@@ -823,21 +822,7 @@ export default function InvoiceGenerator() {
                           </p>
                         </div>
                         {/* QR Code Display */}
-                        {invoiceData.promptPayId && (
-                          <div className='flex flex-col items-center pt-4 border-t'>
-                            <p className='text-sm font-medium text-gray-700 mb-3'>
-                              {t('scanToPay') || 'Scan to Pay'}
-                            </p>
-                            <PromptPayQR
-                              promptPayId={invoiceData.promptPayId}
-                              amount={calculateTotal()}
-                              size={180}
-                            />
-                            <p className='text-xs text-gray-500 mt-2 text-center'>
-                              Amount: {NumbertoPrice(calculateTotal(), currency)}
-                            </p>
-                          </div>
-                        )}
+                        
                       </div>
                     )}
                   </CardContent>
@@ -1119,19 +1104,7 @@ export default function InvoiceGenerator() {
                               </p>
                             </div>
 
-                            {/* QR Code in Preview */}
-                            {invoiceData.promptPayId && (
-                              <div className='flex flex-col items-center'>
-                                <PromptPayQR
-                                  promptPayId={invoiceData.promptPayId}
-                                  amount={calculateTotal()}
-                                  size={120}
-                                />
-                                <p className='text-xs text-gray-500 mt-2 text-center'>
-                                  {t('scanToPay') || 'Scan to Pay'}
-                                </p>
-                              </div>
-                            )}
+                        
                           </div>
                         </div>
                       )}

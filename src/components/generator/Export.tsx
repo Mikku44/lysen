@@ -1,3 +1,4 @@
+import { InvoiceData } from '@/app/store/features/invoices/invoicesSlice'
 import { Button } from '@/components/ui/button'
 import { exportDocxService } from '@/services/exportService'
 import {
@@ -11,7 +12,7 @@ import React from 'react'
 
 interface IExportProps {
   onExport?: () => void,
-  invoiceData?: any
+  invoiceData?: InvoiceData
 }
 
 export default function Export({ onExport, invoiceData }: Readonly<IExportProps>) {
@@ -35,7 +36,7 @@ export default function Export({ onExport, invoiceData }: Readonly<IExportProps>
       const link = document.createElement('a');
 
       link.href = url;
-      link.download = `invoice-${invoiceData.invoiceNumber || 'draft'}.json`;
+      link.download = `invoice-${invoiceData?.invoiceNumber || 'draft'}.json`;
 
       // 3. Trigger download and cleanup
       document.body.appendChild(link);
