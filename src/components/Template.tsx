@@ -31,7 +31,7 @@ export default function Template () {
 
   const handleChangeColor = (value: string) => {
     console.log("Rerendered",value)
-    dispatch(setColor(value))
+    dispatch(setColor(value.replace("undefined","")))
   }
 
   useEffect(() => {
