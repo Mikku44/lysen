@@ -2,12 +2,44 @@
 import { useEffect, useRef, useState } from 'react'
 
 export default function MouseTracker () {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [displayPosition, setDisplayPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState(20)
 
+  const targetPosition = useRef({ x: 0, y: 0 })
+  const currentPosition = useRef({ x: 0, y: 0 })
   const lastPosition = useRef({ x: 0, y: 0 })
   const lastTime = useRef(Date.now())
+  const rafId = useRef<number | null>(null)
 
+  // Smooth animation loop using lerp
+  useEffect(() => {
+    const animate = () => {
+      // Lerp factor (0.15 = smooth follow, higher = faster, lower = slower)
+      const lerpFactor = 0.15
+
+      currentPosition.current.x +=
+        (targetPosition.current.x - currentPosition.current.x) * lerpFactor
+      currentPosition.current.y +=
+        (targetPosition.current.y - currentPosition.current.y) * lerpFactor
+
+      setDisplayPosition({
+        x: currentPosition.current.x,
+        y: currentPosition.current.y
+      })
+
+      rafId.current = requestAnimationFrame(animate)
+    }
+
+    rafId.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current)
+      }
+    }
+  }, [])
+
+  // Mouse move handler
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const handleMouseMove = (e: MouseEvent) => {
@@ -17,12 +49,13 @@ export default function MouseTracker () {
         const dx = e.clientX - lastPosition.current.x
         const dy = e.clientY - lastPosition.current.y
         const distance = Math.sqrt(dx * dx + dy * dy)
-        const speed = distance / deltaTime
+        const speed = distance / (deltaTime || 1)
 
         const newSize = Math.min(60, Math.max(10, speed * 50))
         setSize(newSize)
 
-        setPosition({ x: e.clientX, y: e.clientY })
+        // Update target position for smooth animation
+        targetPosition.current = { x: e.clientX, y: e.clientY }
         lastPosition.current = { x: e.clientX, y: e.clientY }
         lastTime.current = now
       }
@@ -36,19 +69,18 @@ export default function MouseTracker () {
 
   return (
     <div
-    className='print:hidden'
+      className='print:hidden'
       style={{
         position: 'fixed',
-        top: position.y - size / 2,
-        left: position.x - size / 2,
+        top: displayPosition.y - size / 2,
+        left: displayPosition.x - size / 2,
         width: size,
         height: size,
         borderRadius: '50%',
         backgroundColor: 'var(--primary)',
         pointerEvents: 'none',
         zIndex: 9999,
-        transition:
-          'width 0.4s ease, height 0.4s ease, top 0.1s ease, left 0.1s ease'
+        transition: 'width 0.3s ease, height 0.3s ease'
       }}
     />
   )

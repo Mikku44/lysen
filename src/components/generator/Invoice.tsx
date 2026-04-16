@@ -19,6 +19,7 @@ import { NumbertoPrice } from '@/lib/currencyFormator'
 import Export from './Export'
 import { selectTemplate } from '@/app/store/features/template/templateSlice'
 import { templateList } from '@/app/constant/app'
+import PromptPayQR from './PromptPayQR'
 
 interface InvoiceItem {
   id: string
@@ -48,6 +49,12 @@ interface InvoiceData {
   terms: string
   constructorName: string
   constructorSign: string
+  // Payment fields for receipt
+  paymentMethod?: 'cash' | 'transfer' | 'promptpay'
+  promptPayId?: string
+  bankName?: string
+  bankAccount?: string
+  accountHolder?: string
 }
 
 export default function InvoiceGenerator () {
@@ -69,7 +76,13 @@ export default function InvoiceGenerator () {
     notes: '',
     terms: '',
     constructorName: '',
-    constructorSign: ''
+    constructorSign: '',
+    // Payment fields
+    paymentMethod: 'cash',
+    promptPayId: '',
+    bankName: '',
+    bankAccount: '',
+    accountHolder: ''
   })
 
   const [showPreview, setShowPreview] = useState(false)
@@ -651,6 +664,131 @@ export default function InvoiceGenerator () {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Payment Section - Only for Receipt */}
+              {currentForm === 'receipt' && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className='text-lg font-medium'>
+                      {t('paymentMethod') || 'Payment Method'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className='space-y-4'>
+                    {/* Payment Method Selection */}
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        {t('selectPaymentMethod') || 'Select Payment Method'}
+                      </label>
+                      <div className='flex gap-2 flex-wrap'>
+                        <Button
+                          type='button'
+                          variant={invoiceData.paymentMethod === 'cash' ? 'default' : 'outline'}
+                          onClick={() => handleInputChange('paymentMethod', 'cash')}
+                          className='flex-1'
+                        >
+                          {t('cash') || 'Cash'}
+                        </Button>
+                        <Button
+                          type='button'
+                          variant={invoiceData.paymentMethod === 'transfer' ? 'default' : 'outline'}
+                          onClick={() => handleInputChange('paymentMethod', 'transfer')}
+                          className='flex-1'
+                        >
+                          {t('bankTransfer') || 'Bank Transfer'}
+                        </Button>
+                        <Button
+                          type='button'
+                          variant={invoiceData.paymentMethod === 'promptpay' ? 'default' : 'outline'}
+                          onClick={() => handleInputChange('paymentMethod', 'promptpay')}
+                          className='flex-1'
+                        >
+                          PromptPay
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Bank Transfer Fields */}
+                    {invoiceData.paymentMethod === 'transfer' && (
+                      <div className='space-y-3'>
+                        <div>
+                          <label className='block text-sm font-medium text-gray-700 mb-1'>
+                            {t('bankName') || 'Bank Name'}
+                          </label>
+                          <Input
+                            value={invoiceData.bankName || ''}
+                            onChange={e =>
+                              handleInputChange('bankName', e.target.value)
+                            }
+                            placeholder={t('enterBankName') || 'e.g., Kasikorn Bank'}
+                          />
+                        </div>
+                        <div>
+                          <label className='block text-sm font-medium text-gray-700 mb-1'>
+                            {t('accountHolder') || 'Account Holder Name'}
+                          </label>
+                          <Input
+                            value={invoiceData.accountHolder || ''}
+                            onChange={e =>
+                              handleInputChange('accountHolder', e.target.value)
+                            }
+                            placeholder={t('enterAccountHolder') || 'Account holder name'}
+                          />
+                        </div>
+                        <div>
+                          <label className='block text-sm font-medium text-gray-700 mb-1'>
+                            {t('bankAccount') || 'Bank Account Number'}
+                          </label>
+                          <Input
+                            value={invoiceData.bankAccount || ''}
+                            onChange={e =>
+                              handleInputChange('bankAccount', e.target.value)
+                            }
+                            placeholder={t('enterBankAccount') || 'Account number'}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* PromptPay Fields */}
+                    {invoiceData.paymentMethod === 'promptpay' && (
+                      <div className='space-y-4'>
+                        <div>
+                          <label className='block text-sm font-medium text-gray-700 mb-1'>
+                            {t('promptPayId') || 'PromptPay ID / Mobile Number'}
+                          </label>
+                          <Input
+                            value={invoiceData.promptPayId || ''}
+                            onChange={e =>
+                              handleInputChange('promptPayId', e.target.value)
+                            }
+                            placeholder={t('enterPromptPayId') || 'e.g., 0812345678 or ID number'}
+                            maxLength={13}
+                          />
+                          <p className='text-xs text-gray-500 mt-1'>
+                            Enter phone number (10 digits) or Thai national ID (13 digits)
+                          </p>
+                        </div>
+                        {/* QR Code Display */}
+                        {invoiceData.promptPayId && (
+                          <div className='flex flex-col items-center pt-4 border-t'>
+                            <p className='text-sm font-medium text-gray-700 mb-3'>
+                              {t('scanToPay') || 'Scan to Pay'}
+                            </p>
+                            <PromptPayQR
+                              promptPayId={invoiceData.promptPayId}
+                              amount={calculateTotal()}
+                              size={180}
+                            />
+                            <p className='text-xs text-gray-500 mt-2 text-center'>
+                              Amount: {NumbertoPrice(calculateTotal(), currency)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
 
@@ -834,6 +972,104 @@ export default function InvoiceGenerator () {
                       <p className='text-sm text-gray-700 whitespace-pre-line'>
                         {invoiceData.terms}
                       </p>
+                    </div>
+                  )}
+
+                  {/* Payment Info - Only for Receipt */}
+                  {currentForm === 'receipt' && invoiceData.paymentMethod && (
+                    <div className='mt-6 pt-6 border-t border-gray-200'>
+                      <h3 className='font-bold text-[var(--primary)] mb-4'>
+                        {t('paymentMethod') || 'Payment Method'}:
+                      </h3>
+
+                      {/* Cash Payment */}
+                      {invoiceData.paymentMethod === 'cash' && (
+                        <div className='bg-gray-50 p-4 rounded-lg'>
+                          <div className='flex items-center gap-2 mb-2'>
+                            <svg className='w-5 h-5 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z' />
+                            </svg>
+                            <span className='font-medium text-gray-900'>
+                              {t('paidByCash') || 'Paid by Cash'}
+                            </span>
+                          </div>
+                          <p className='text-sm text-gray-600'>
+                            {t('amountReceived') || 'Amount Received'}: {NumbertoPrice(calculateTotal(), currency)}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Bank Transfer */}
+                      {invoiceData.paymentMethod === 'transfer' && (
+                        <div className='bg-gray-50 p-4 rounded-lg space-y-2'>
+                          <div className='flex items-center gap-2 mb-2'>
+                            <svg className='w-5 h-5 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' />
+                            </svg>
+                            <span className='font-medium text-gray-900'>
+                              {t('bankTransfer') || 'Bank Transfer'}
+                            </span>
+                          </div>
+                          {invoiceData.bankName && (
+                            <p className='text-sm text-gray-700'>
+                              <span className='font-medium'>{t('bank') || 'Bank'}:</span> {invoiceData.bankName}
+                            </p>
+                          )}
+                          {invoiceData.accountHolder && (
+                            <p className='text-sm text-gray-700'>
+                              <span className='font-medium'>{t('accountHolder') || 'Account Holder'}:</span> {invoiceData.accountHolder}
+                            </p>
+                          )}
+                          {invoiceData.bankAccount && (
+                            <p className='text-sm text-gray-700'>
+                              <span className='font-medium'>{t('accountNumber') || 'Account Number'}:</span> {invoiceData.bankAccount}
+                            </p>
+                          )}
+                          <p className='text-sm text-gray-600 pt-2 border-t border-gray-200 mt-2'>
+                            {t('amountTransferred') || 'Amount Transferred'}: {NumbertoPrice(calculateTotal(), currency)}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* PromptPay */}
+                      {invoiceData.paymentMethod === 'promptpay' && (
+                        <div className='bg-gray-50 p-4 rounded-lg'>
+                          <div className='flex flex-col md:flex-row md:items-start gap-6'>
+                            <div className='flex-1 space-y-2'>
+                              <div className='flex items-center gap-2 mb-3'>
+                                <svg className='w-5 h-5 text-purple-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v1m6 11h2m-6 0h-2v4h2v-4zM6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
+                                </svg>
+                                <span className='font-medium text-gray-900'>
+                                  PromptPay
+                                </span>
+                              </div>
+                              {invoiceData.promptPayId && (
+                                <p className='text-sm text-gray-700'>
+                                  <span className='font-medium'>{t('promptPayId') || 'PromptPay ID'}:</span> {invoiceData.promptPayId}
+                                </p>
+                              )}
+                              <p className='text-sm text-gray-600 pt-2'>
+                                {t('amount') || 'Amount'}: <span className='font-bold text-[var(--primary)]'>{NumbertoPrice(calculateTotal(), currency)}</span>
+                              </p>
+                            </div>
+
+                            {/* QR Code in Preview */}
+                            {invoiceData.promptPayId && (
+                              <div className='flex flex-col items-center'>
+                                <PromptPayQR
+                                  promptPayId={invoiceData.promptPayId}
+                                  amount={calculateTotal()}
+                                  size={120}
+                                />
+                                <p className='text-xs text-gray-500 mt-2 text-center'>
+                                  {t('scanToPay') || 'Scan to Pay'}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

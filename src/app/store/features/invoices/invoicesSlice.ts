@@ -29,6 +29,12 @@ export interface InvoiceData {
   terms: string
   constructorName: string
   constructorSign: string
+  // Payment fields for receipt
+  paymentMethod?: 'cash' | 'transfer' | 'promptpay'
+  promptPayId?: string
+  bankName?: string
+  bankAccount?: string
+  accountHolder?: string
 }
 
 interface InvoiceState {
@@ -51,7 +57,13 @@ const initialState: InvoiceState = {
     notes: '',
     terms: '',
     constructorName: '',
-    constructorSign: ''
+    constructorSign: '',
+    // Payment fields
+    paymentMethod: 'cash',
+    promptPayId: '',
+    bankName: '',
+    bankAccount: '',
+    accountHolder: ''
   }
 }
 

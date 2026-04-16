@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 import SignaturePad from 'signature_pad'
 
 interface SignatureCanvasProps {
@@ -17,30 +17,41 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
   width = 500
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const signaturePadRef = useRef<SignaturePad>(null)
- 
+  const signaturePadRef = useRef<SignaturePad | null>(null)
 
+  // Initialize signature pad
   useEffect(() => {
-    if (canvasRef.current) {
-      signaturePadRef.current = new SignaturePad(canvasRef.current, {
-        backgroundColor: '#ffffff',
-        penColor: 'black'
-      })
+    if (!canvasRef.current) return
 
-      if (value) {
-         signaturePadRef.current?.clear()
-          signaturePadRef.current?.fromDataURL(value,{height,width})
-      }
+    signaturePadRef.current = new SignaturePad(canvasRef.current, {
+      backgroundColor: '#ffffff',
+      penColor: 'black'
+    })
 
-      // On end drawing
+    const signaturePad = signaturePadRef.current
 
-      signaturePadRef.current?.addEventListener('endStroke', () => {
-        const dataUrl = signaturePadRef.current?.toDataURL()
-      
-        if (dataUrl) onChange(dataUrl)
-      })
+    const handleEndStroke = () => {
+      const dataUrl = signaturePad?.toDataURL()
+      if (dataUrl) onChange(dataUrl)
     }
-  }, [])
+
+    signaturePad.addEventListener('endStroke', handleEndStroke)
+
+    // Cleanup function to remove event listener
+    return () => {
+      signaturePad.removeEventListener('endStroke', handleEndStroke)
+      signaturePad.clear()
+      signaturePadRef.current = null
+    }
+  }, [onChange])
+
+  // Handle value changes
+  useEffect(() => {
+    if (!signaturePadRef.current || !value) return
+
+    signaturePadRef.current.clear()
+    signaturePadRef.current.fromDataURL(value, { height, width })
+  }, [value, height, width])
   
 
   const clearSignature = () => {
