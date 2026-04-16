@@ -30,7 +30,7 @@ export default function Template () {
   }
 
   const handleChangeColor = (value: string) => {
-    // console.log("Rerendered")
+    console.log("Rerendered",value)
     dispatch(setColor(value))
   }
 
