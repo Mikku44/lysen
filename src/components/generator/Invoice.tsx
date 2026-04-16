@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, Minus, Download, Eye } from 'lucide-react'
+import { Plus, Minus, Download, Eye, CloudUpload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import {
   resetCurrentInvoice,
   selectInvoice,
+  setCurrentInvoice,
   upsertInvoice
 } from '@/app/store/features/invoices/invoicesSlice'
 import SignatureCanvas from './SignatureCanvas'
@@ -20,6 +21,7 @@ import Export from './Export'
 import { selectTemplate } from '@/app/store/features/template/templateSlice'
 import { templateList } from '@/app/constant/app'
 import PromptPayQR from './PromptPayQR'
+import LoadDataQR from './InvoiceQRCode'
 
 interface InvoiceItem {
   id: string
@@ -57,7 +59,7 @@ interface InvoiceData {
   accountHolder?: string
 }
 
-export default function InvoiceGenerator () {
+export default function InvoiceGenerator() {
   const { currency } = useAppSelector(selectTemplate)
   const currentInvoice = useAppSelector(selectInvoice)
   const { t } = useTranslation()
@@ -106,6 +108,49 @@ export default function InvoiceGenerator () {
   const saveInvoice = () => {
     toast('Quotation has been saved!')
     dispatch(upsertInvoice(invoiceData))
+  }
+
+  const importInvoice = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json'; // Only allow JSON files
+
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          try {
+            // 2. Parse the file content
+            const json = JSON.parse(event.target?.result as string);
+
+            // 3. Basic Validation: Check if it looks like an invoice
+            if (json.invoiceNumber && Array.isArray(json.items)) {
+
+              // 4. Update Redux Store
+              dispatch(upsertInvoice(json));
+
+              // Optional: If you want to switch to this invoice immediately
+              dispatch(setCurrentInvoice(json));
+
+              toast('Invoice has been imported!');
+            } else {
+              toast('Invalid invoice format.');
+            }
+          } catch (error) {
+            console.error("Import Error:", error);
+            toast('Failed to parse file.');
+          }
+        };
+
+        reader.readAsText(file);
+      }
+    };
+
+    input.click();
   }
 
   const addItem = () => {
@@ -251,8 +296,16 @@ export default function InvoiceGenerator () {
               <Eye className='w-4 h-4' />
               {showPreview ? 'Edit' : 'Preview'}
             </Button>
+            <Button
+              onClick={importInvoice}
+              className='flex items-center gap-2  hover:brightness-110'
+            >
+              <CloudUpload className='w-4 h-4' />
+              Import
+            </Button>
             <Export
               key={refreshKey}
+              invoiceData={invoiceData}
               onExport={() => {
                 setShowPreview(true)
               }}
@@ -264,6 +317,7 @@ export default function InvoiceGenerator () {
               <Download className='w-4 h-4' />
               Keep on your device
             </Button>
+
             <Button
               onClick={handleSwitchForm}
               className='flex items-center gap-2  hover:brightness-110'
@@ -795,9 +849,8 @@ export default function InvoiceGenerator () {
           {/* Preview Section */}
           <div
             ref={invoiceRef as RefObject<HTMLDivElement>}
-            className={`${
-              showPreview ? 'lg:col-span-2' : ''
-            } font-sarabun duration-200 `}
+            className={`${showPreview ? 'lg:col-span-2' : ''
+              } font-sarabun duration-200 `}
           >
             <Card className='h-fit   shadow-none'>
               <CardContent className='p-8 flex flex-col min-h-[1400px] justify-between'>
@@ -918,9 +971,9 @@ export default function InvoiceGenerator () {
                         const taxAmount =
                           tax.type === 'percent'
                             ? NumbertoPrice(
-                                (tax.value / 100) * subtotal,
-                                currency
-                              )
+                              (tax.value / 100) * subtotal,
+                              currency
+                            )
                             : NumbertoPrice(tax.value, currency)
 
                         return (
@@ -948,6 +1001,15 @@ export default function InvoiceGenerator () {
                         <span className='font-bold text-xl text-[var(--primary)]'>
                           {NumbertoPrice(calculateTotal(), currency)}
                         </span>
+
+
+                      </div>
+
+                      {/* Payment Info - Only for Receipt */}
+                      <div className=" sticky top-4 mt-10">
+                       
+                        {/* <LoadDataQR data={invoiceData} /> */}
+
                       </div>
                     </div>
                   </div>
@@ -1031,6 +1093,9 @@ export default function InvoiceGenerator () {
                         </div>
                       )}
 
+
+
+
                       {/* PromptPay */}
                       {invoiceData.paymentMethod === 'promptpay' && (
                         <div className='bg-gray-50 p-4 rounded-lg'>
@@ -1087,12 +1152,12 @@ export default function InvoiceGenerator () {
                   </div>
 
                   <div className='grid justify-items-center w-full'>
-                    <div className=''>{t('Construtor')}</div>
+                    <div className='relative z-10'>{t('Construtor')}</div>
                     {invoiceData.constructorSign ? (
-                      <div className='py-4  flex justify-center border-b border-black/60 border-dashed w-48 h-fit'>
+                      <div className='py-4 flex justify-center  w-48 h-fit'>
                         <img
                           alt='signature'
-                          className='w-[150px] absolute mix-blend-multiply -translate-y-8  z-10'
+                          className='w-[150px] absolute  -translate-y-5  '
                           src={invoiceData.constructorSign}
                         />
                       </div>
@@ -1100,9 +1165,8 @@ export default function InvoiceGenerator () {
                       <div className='py-4 border-b border-black/60 border-dashed w-48'></div>
                     )}
                     <div
-                      className={`py-4 text-black/60 ${
-                        !invoiceData.constructorName && 'tracking-wider'
-                      }`}
+                      className={`py-4 relative z-10 text-black/60  border-t border-black/60 border-dashed ${!invoiceData.constructorName && 'tracking-wider'
+                        }`}
                     >
                       ({' '}
                       {invoiceData.constructorName ||
@@ -1110,7 +1174,7 @@ export default function InvoiceGenerator () {
                       )
                     </div>
 
-                    <div className=' text-black/60 tracking-wider'>
+                    <div className='relative z-10 text-black/60 tracking-wider'>
                       {t('date')}{' '}
                       {invoiceData.date.split('-').reverse().join('/')}
                     </div>

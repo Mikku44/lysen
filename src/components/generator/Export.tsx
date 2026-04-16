@@ -10,18 +10,44 @@ import React from 'react'
 
 
 interface IExportProps {
-  onExport?: () => void
+  onExport?: () => void,
+  invoiceData?: any
 }
 
-export default function Export ({ onExport }: Readonly<IExportProps>) {
-  async function exportPDF () {
+export default function Export({ onExport, invoiceData }: Readonly<IExportProps>) {
+  async function exportPDF() {
     window.print()
   }
 
-  async function exportDocx () {
+  async function exportDocx() {
     const result = await exportDocxService()
     console.log(result)
   }
+
+  const exportInvoiceToJson = () => {
+    try {
+      // 1. Prepare the data
+      const dataStr = JSON.stringify(invoiceData, null, 2); // null, 2 adds pretty-printing
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+      // 2. Create a download link
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = `invoice-${invoiceData.invoiceNumber || 'draft'}.json`;
+
+      // 3. Trigger download and cleanup
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export failed", error);
+    }
+  };
+
+
 
   return (
     <div>
@@ -45,10 +71,17 @@ disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none
           <div className='rounded-md border bg-white p-1 shadow grid my-1 gap-1 max-w-[180px]'>
             <Button
               onClick={exportPDF}
-              className='flex bg-white rounded-none text-black hover:bg-gray-300/20 shadow-none items-center gap-2 w-full hover:brightness-110'
+              className='flex bg-white over rounded-none text-black hover:bg-gray-300/20 shadow-none items-center gap-2 w-full hover:brightness-110'
             >
               <Download className='w-4 h-4' />
               <div className='w-[120px]'>.PDF (PDF File)</div>
+            </Button>
+            <Button
+              onClick={exportInvoiceToJson}
+              className='flex bg-white overflow-clip rounded-none text-black hover:bg-gray-300/20 shadow-none items-center gap-2 w-full hover:brightness-110'
+            >
+              <Download className='w-4 h-4' />
+              <div className='w-[120px]'>.JSON (File)</div>
             </Button>
             <hr />
             <Button
